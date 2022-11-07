@@ -1,0 +1,17 @@
+{
+  "name": "stage-manager-api",
+  "version": "1.0.0",
+  "description": "API for the Stage Manager.",
+  "main": "index.js",
+  "repository": "https://github.com/Naravia/stage-manager",
+  "author": "Naravia",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
