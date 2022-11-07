@@ -9,9 +9,14 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "client": "cd stage-manager-ui && yarn start",
+    "server": "cd stage-manager-api && node index.js",
+    "start": "concurrently \"yarn run client\""
   },
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^7.5.0"
   }
 }
