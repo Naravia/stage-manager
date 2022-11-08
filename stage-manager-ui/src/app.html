@@ -1,9 +1,9 @@
 <template>
   <require from="styles.css"></require>
-  <require from="./navigation.html"></require>
-  
-  <navigation></navigation>
-  ${title}
+  <require from="./navigation"></require>
+
+  <navigation title="Stage Runner"></navigation>
+
   <div class="container-fluid d-flex flex-column">
     <div class="card mt-1 mb-1 sticky-top">
       <div class="card-header">Previous Act - 2:03</div>
@@ -40,7 +40,7 @@
 
     <div class="card text-bg-light mt-1 mb-1 flex-grow-1">
       <div class="card-header">All Upcoming</div>
-      <div style="overflow-y: auto">
+      <div style="overflow-y:auto">
         <div class="card-body" repeat.for="i of 10">
           <h5 class="card-title">${10-i} Act Title</h5>
           <h6 class="card-subtitle mb-2">
@@ -48,10 +48,8 @@
           </h6>
           <hr />
         </div>
-        </div>
-        
       </div>
     </div>
-  
-  </div><!-- fluid -->
+  </div>
+  <!-- fluid -->
 </template>

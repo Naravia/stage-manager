@@ -1,3 +1,7 @@
+import{bindable}from "aurelia-framework"
 export class Navigation {
-  title = 'somthing';
+  @bindable title;
+  constructor(title){
+    this.title = title;
+  }
 }
