@@ -1,0 +1,9 @@
+{
+    "dbConfig": {
+        "host": "localhost",
+        "user": "root",
+        "password": "ascent",
+        "database": "stage_manager_dev",
+        "port": 3306
+    }
+}

@@ -9,13 +9,11 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "client": "cd stage-manager-ui && yarn start",
-    "server": "cd stage-manager-api && node index.js",
-    "start": "concurrently \"yarn run client\""
+    "start-api": "cd stage-manager-api && yarn start",
+    "start-ui": "cd stage-manager-ui && yarn start",
+    "start": "concurrently \"yarn run start-api\" \"yarn run start-ui\""
   },
-  "dependencies": {
-    "express": "^4.18.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "concurrently": "^7.5.0"
   }
