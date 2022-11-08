@@ -13,12 +13,75 @@ function createConnection() {
     });
 }
 
+export function createAct(actName, estimate, performer, showId) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject(new Error(err.sqlMessage));
+                return;
+            }
+        });
+
+        let record = {
+            name: actName,
+            duration_estimate: estimate,
+            performer: performer
+        };
+
+        if (showId) {
+            getShowById(showId)
+                .then(result => {
+                    if (!result) {
+                        reject(`Show with ID ${showId} not found.`);
+                        return;
+                    }
+
+                    connection.query(`INSERT INTO acts SET ?`, record, (err, results) => {
+                        if (err) {
+                            reject(err);
+                            connection.end();
+                            return;
+                        }
+                        
+                        record.id = results.insertId;
+                        const joinRecord = {
+                            act_id: record.id,
+                            show_id: showId
+                        };
+                        console.log(joinRecord);
+                        connection.query(`INSERT INTO acts_shows SET ?`, joinRecord, (err) => {
+                            if (err) {
+                                reject(err);
+                                connection.end();
+                                return;
+                            }
+
+                            resolve(record);
+                        });
+                    })
+                })
+        } else {
+            connection.query(`INSERT INTO acts SET ?`, record, (err, results) => {
+                if (err) {
+                    reject(err);
+                    connection.end();
+                    return;
+                }
+                
+                record.id = results.insertId;
+                resolve(record);
+            })
+        }
+    })
+}
+
 export function createShow(showName) {
     return new Promise((resolve, reject) => {
         const connection = createConnection();
         connection.connect(err => {
             if (err) {
-                reject(err.sqlMessage);
+                reject(new Error(err.sqlMessage));
                 return;
             }
         });
@@ -26,7 +89,7 @@ export function createShow(showName) {
         let record = {name: showName};
         connection.query(`INSERT INTO shows SET ?`, record, (err, results) => {
             if (err) {
-                reject(err.message);
+                reject(err);
                 connection.end();
                 return;
             }
@@ -38,19 +101,57 @@ export function createShow(showName) {
     });
 }
 
+export function getActsForShow(showId) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject(new Error(err.sqlMessage));
+                return;
+            }
+        });
+
+        connection.query(`SELECT * FROM acts_shows WHERE show_id = ?`, [showId], (err, results) => {
+            if (err) {
+                reject(err);
+                connection.end();
+                return;
+            }
+
+            if (results.length === 0) {
+                resolve([]);
+                return;
+            }
+
+            const actIds = results.map(result => result.act_id);
+            connection.query(`SELECT * FROM acts WHERE id IN (?)`, [actIds], (err, results) => {
+                if (err) {
+                    reject(err);
+                    connection.end();
+                    return;
+                }
+
+                resolve(results);
+                connection.end();
+                return;
+            });
+        });
+    });
+}
+
 export function getAllActs() {
     return new Promise((resolve, reject) => {
         const connection = createConnection();
         connection.connect(err => {
             if (err) {
-                reject(err.sqlMessage);
+                reject(new Error(err.sqlMessage));
                 return;
             }
         });
 
         connection.query(`SELECT * FROM acts`, (err, results) => {
             if (err) {
-                reject(err.message);
+                reject(err);
                 connection.end();
                 return;
             }
@@ -66,14 +167,14 @@ export function getAllShows() {
         const connection = createConnection();
         connection.connect(err => {
             if (err) {
-                reject(err.sqlMessage);
+                reject(new Error(err.sqlMessage));
                 return;
             }
         });
 
         connection.query(`SELECT * FROM shows`, (err, results) => {
             if (err) {
-                reject(err.message);
+                reject(err);
                 connection.end();
                 return;
             }
@@ -84,12 +185,40 @@ export function getAllShows() {
     })
 }
 
+export function getShowById(id) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject(new Error(err.sqlMessage));
+                return;
+            }
+        });
+
+        connection.query(`SELECT * FROM shows WHERE id = ?`, [id], (err, results) => {
+            if (err) {
+                reject(err);
+                connection.end();
+                return;
+            }
+
+            if (results.length === 0) {
+                resolve(null);
+            } else {
+                resolve(results[0]);
+            }
+
+            connection.end();
+        });
+    })
+}
+
 export function validateSchema() {
     return new Promise((resolve, reject) => {
         const connection = createConnection();
         connection.connect(err => {
             if (err) {
-                reject(err.sqlMessage);
+                reject(new Error(err.sqlMessage));
                 return;
             }
 

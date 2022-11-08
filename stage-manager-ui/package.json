@@ -2,10 +2,7 @@
   "name": "stage-manager-ui",
   "description": "An Aurelia client application.",
   "version": "0.1.0",
-  "repository": {
-    "type": "???",
-    "url": "???"
-  },
+  "repository": "https://github.com/Naravia/stage-manager",
   "license": "MIT",
   "dependencies": {
     "@popperjs/core": "^2.11.6",
