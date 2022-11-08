@@ -38,6 +38,29 @@ export function createShow(showName) {
     });
 }
 
+export function getAllActs() {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject(err.sqlMessage);
+                return;
+            }
+        });
+
+        connection.query(`SELECT * FROM acts`, (err, results) => {
+            if (err) {
+                reject(err.message);
+                connection.end();
+                return;
+            }
+
+            resolve(results);
+            connection.end();
+        });
+    });
+}
+
 export function getAllShows() {
     return new Promise((resolve, reject) => {
         const connection = createConnection();
@@ -78,7 +101,16 @@ export function validateSchema() {
                     return;
                 }
 
-                resolve();
+                // Validate acts table
+                connection.query(`SELECT 1 FROM acts WHERE id=0 AND name='' AND duration_estimate='' AND performer=''`, err => {
+                    if (err) {
+                        reject(`Schema for 'acts' table does not match.`);
+                        connection.end();
+                        return;
+                    }
+
+                    resolve();
+                });
             })
         });
     });
