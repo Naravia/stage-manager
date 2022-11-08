@@ -14,17 +14,23 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table stage_manager_dev.acts
+CREATE TABLE IF NOT EXISTS `acts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `duration_estimate` varchar(64) DEFAULT NULL,
+  `performer` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- Dumping database structure for stage_manager_dev
-CREATE DATABASE IF NOT EXISTS `stage_manager_dev` /*!40100 DEFAULT CHARACTER SET utf8mb3 */;
-USE `stage_manager_dev`;
+-- Data exporting was unselected.
 
 -- Dumping structure for table stage_manager_dev.shows
 CREATE TABLE IF NOT EXISTS `shows` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 
 -- Data exporting was unselected.
 
