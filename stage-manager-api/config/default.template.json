@@ -5,5 +5,18 @@
         "password": "ascent",
         "database": "stage_manager_dev",
         "port": 3306
+    },
+    "emailConfig": {
+        "smtp": {
+            "port": 587,
+            "host": "localhost",
+            "secure": true,
+            "auth": {
+                "type": "login",
+                "user": "",
+                "pass": ""
+            },
+            "authMethod": "PLAIN"
+        }
     }
 }

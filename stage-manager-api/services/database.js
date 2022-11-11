@@ -1,5 +1,7 @@
+import bcrypt from 'bcrypt';
 import config from 'config';
 import mysql from 'mysql';
+import randomstring from 'randomstring';
 
 const dbConfig = config.get('dbConfig');
 
@@ -95,6 +97,77 @@ export function createShow(showName) {
             }
 
             record.id = results.insertId;
+            resolve(record);
+            connection.end();
+        });
+    });
+}
+
+export function createUser(username, password, email) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject (new Error(err.sqlMessage));
+                return;
+            }
+        });
+
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(password, salt, (err, hash) => {
+                let record = {
+                    username,
+                    password: hash,
+                    email,
+                    is_verified: false
+                };
+
+                connection.query(`INSERT INTO users SET ?`, record, (err, results) => {
+                    if (err) {
+                        reject(err);
+                        connection.end();
+                        return;
+                    }
+
+                    record.id = results.insertId;
+                    resolve(record);
+                    connection.end();
+                });
+            });
+        });
+    });
+}
+
+export function createVerificationTokenForUser(userId) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject (new Error(err.sqlMessage));
+                return;
+            }
+        });
+
+        connection.query(`DELETE FROM user_verification_tokens WHERE user_id = ?`, [userId], (err, results) => {
+            if (err) {
+                reject(err);
+                connection.end();
+                return;
+            }
+        });
+
+        const record = {
+            user_id: userId,
+            token: randomstring.generate()
+        };
+
+        connection.query(`INSERT INTO user_verification_tokens SET ?`, record, (err, results) => {
+            if (err) {
+                reject(err);
+                connection.end();
+                return;
+            }
+
             resolve(record);
             connection.end();
         });
@@ -211,6 +284,36 @@ export function getShowById(id) {
             connection.end();
         });
     })
+}
+
+export function getUserById(id) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject(new Error(err.sqlMessage));
+                return;
+            }
+        });
+
+        connection.query(`SELECT * FROM users WHERE id = ?`, [id], (err, results) => {
+            if (err) {
+                reject(err);
+                connection.end();
+                return;
+            }
+
+            if (results.length === 0) {
+                resolve(null);
+            } else {
+                let record = results[0];
+                record.password = undefined;
+                resolve(record);
+            }
+
+            connection.end();
+        });
+    });
 }
 
 export function validateSchema() {
