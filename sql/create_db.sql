@@ -25,11 +25,47 @@ CREATE TABLE IF NOT EXISTS `acts` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table stage_manager_dev.acts_shows
+CREATE TABLE IF NOT EXISTS `acts_shows` (
+  `act_id` int(11) NOT NULL,
+  `show_id` int(11) NOT NULL,
+  KEY `FK__acts` (`act_id`),
+  KEY `FK__shows` (`show_id`),
+  CONSTRAINT `FK__acts` FOREIGN KEY (`act_id`) REFERENCES `acts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK__shows` FOREIGN KEY (`show_id`) REFERENCES `shows` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table stage_manager_dev.shows
 CREATE TABLE IF NOT EXISTS `shows` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table stage_manager_dev.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(128) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `email` varchar(256) NOT NULL,
+  `is_verified` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table stage_manager_dev.user_verification_tokens
+CREATE TABLE IF NOT EXISTS `user_verification_tokens` (
+  `user_id` int(11) NOT NULL,
+  `token` varchar(32) NOT NULL,
+  PRIMARY KEY (`user_id`,`token`),
+  CONSTRAINT `FK__users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- Data exporting was unselected.

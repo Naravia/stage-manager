@@ -45,7 +45,7 @@ export function createAct(actName, estimate, performer, showId) {
                             connection.end();
                             return;
                         }
-                        
+
                         record.id = results.insertId;
                         const joinRecord = {
                             act_id: record.id,
@@ -70,7 +70,7 @@ export function createAct(actName, estimate, performer, showId) {
                     connection.end();
                     return;
                 }
-                
+
                 record.id = results.insertId;
                 resolve(record);
             })
@@ -88,7 +88,7 @@ export function createShow(showName) {
             }
         });
 
-        let record = {name: showName};
+        let record = { name: showName };
         connection.query(`INSERT INTO shows SET ?`, record, (err, results) => {
             if (err) {
                 reject(err);
@@ -108,7 +108,7 @@ export function createUser(username, password, email) {
         const connection = createConnection();
         connection.connect(err => {
             if (err) {
-                reject (new Error(err.sqlMessage));
+                reject(new Error(err.sqlMessage));
                 return;
             }
         });
@@ -143,7 +143,7 @@ export function createVerificationTokenForUser(userId) {
         const connection = createConnection();
         connection.connect(err => {
             if (err) {
-                reject (new Error(err.sqlMessage));
+                reject(new Error(err.sqlMessage));
                 return;
             }
         });
@@ -340,10 +340,85 @@ export function validateSchema() {
                         connection.end();
                         return;
                     }
+                    
+                    // Validate acts_shows table
+                    connection.query(`SELECT 1 FROM acts_shows WHERE act_id=0 AND show_id=0`, err => {
+                        if (err) {
+                            reject(`Schema for 'acts_shows' table does not match.`);
+                            connection.end();
+                            return;
+                        }
+                        
+                        // Validate users table
+                        connection.query(`SELECT 1 FROM users WHERE id=0 AND username='' AND password='' AND email='' AND is_verified=0`, err => {
+                            if (err) {
+                                reject(`Schema for 'users' table does not match.`);
+                                connection.end();
+                                return;
+                            }
 
-                    resolve();
+                            // Validate user_verification_tokens table
+                            connection.query(`SELECT 1 FROM user_verification_tokens WHERE user_id=0 AND token=''`, err => {
+                                if (err) {
+                                    reject(`Schema for 'user_verification_tokens' table does not match.`);
+                                    connection.end();
+                                    return;
+                                }
+
+                                resolve();
+                            })
+                        })
+                    });
                 });
             })
         });
     });
+}
+
+export function verifyUser(userId, verificationToken) {
+    return new Promise((resolve, reject) => {
+        const connection = createConnection();
+        connection.connect(err => {
+            if (err) {
+                reject(new Error(err.sqlMessage));
+                return;
+            }
+        })
+
+        connection.query(
+            `SELECT * FROM user_verification_tokens WHERE user_id = ? AND token = ? LIMIT 1`,
+            [userId, verificationToken],
+            (err, results) => {
+                if (err) {
+                    reject(err);
+                    connection.end();
+                    return;
+                }
+
+                if (results.length === 0) {
+                    reject(new Error('The verification information is invalid or your account is already verified.'));
+                    connection.end();
+                    return;
+                }
+
+                connection.query(`UPDATE users SET is_verified = 1 WHERE id = ?`, [userId], (err, results) => {
+                    if (err) {
+                        reject(err);
+                        connection.end();
+                        return;
+                    }
+
+                    connection.query(`DELETE FROM user_verification_tokens WHERE user_id = ?`, [userId], (err, results) => {
+                        if (err) {
+                            reject(err);
+                            connection.end();
+                            return;
+                        }
+
+                        resolve();
+                    });
+                });
+            }
+        )
+    })
 }
