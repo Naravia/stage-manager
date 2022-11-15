@@ -14,16 +14,10 @@
     </button>
 
     <div class="navbar-collapse collapse" id="navbarsExample01">
-      <ul class="navbar-nav me-auto mb-2">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li>
+      <ul class="navbar-nav me-auto mb-2" >
+        <li class="nav-item" repeat.for="nav of router.navigation">
+          <a class="nav-link ${nav.isActive ? 'active' : ''}" aria-current="page" href.bind="nav.href">${nav.title}</a>
+        </li>        
       </ul>
     </div>
   </div>
