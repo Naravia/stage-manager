@@ -16,7 +16,7 @@ export class App {
       { route: ['login'], name: 'login', moduleId: PLATFORM.moduleName('auth/login'), nav: true, title: 'Login', settings: {show: 'noauth'} },
       { route: ['running-order'], name: 'running-order', moduleId: PLATFORM.moduleName('running-order/index'), nav: true, title: 'Running Order' },
       { route: 'shows', name: 'shows', moduleId: PLATFORM.moduleName('shows/index'), nav: true, title: 'Shows', settings: {show: 'auth', roles: ['admin']}},
-      { route: ['contact-us'],name: 'contact-us',moduleId: PLATFORM.moduleName('contact-us/index'), nav: true, title: 'Contact Us' }
+      { route: ['contact-us'],       name: 'contact-us',       moduleId: PLATFORM.moduleName('contact-us/index'), nav: true, title: 'Contact Us' }
     ]);
     console.log(router);
   }

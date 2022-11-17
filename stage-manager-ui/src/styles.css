@@ -1,1 +1,18 @@
 body, html{height:100vh}
+
+
+.contact-image-inner{
+  background-color: black;
+  height: 50vh;
+  overflow: hidden;
+}
+.contact-image img{
+  opacity: 0.2;
+}
+
+.centered {
+  position: absolute;
+  top: 35%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+}
