@@ -4,7 +4,10 @@
 
 <div class="d-flex flex-column">
   <div class="card mt-1 mb-1 sticky-top">
-    <div class="card-header">Previous Act - 2:03</div>
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <span>Previous Act - 2:03</span>
+      <a href="/Act-finished" class="btn btn-md btn-outline-secondary">⏪ Rewind to act</a>
+    </div>
     <div class="card-body">
       <h5 class="card-title"><span class="text-muted">1 </span>Act Title</h5>
       <h6 class="card-subtitle mb-2 text-muted">
@@ -14,7 +17,10 @@
   </div>
 
   <div class="card text-bg-success mt-1 mb-1 sticky-top">
-    <div class="card-header">Current Act - 5:30</div>
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <span>Current Act - 5:30</span>
+      <a href="/Act-finished" class="btn btn-md btn-warning">Act Finished</a>
+    </div>
     <div class="card-body">
       <h5 class="card-title">2 Act Title</h5>
       <h6 class="card-subtitle mb-2">
@@ -26,7 +32,7 @@
   <div class="card text-bg-info mt-1 mb-1">
     <div class="card-header d-flex align-items-center justify-content-between">
       <span>Next Act - 4:00</span>
-      <a href="/Act-finished" class="btn btn-md btn-primary">Act Finished</a>
+      <a href="/Act-finished" class="btn btn-md btn-success">On Stage</a>
     </div>
     <div class="card-body">
       <h5 class="card-title">3 Act Title</h5>
@@ -37,10 +43,14 @@
   </div>
 
   <div class="card text-bg-light mt-1 mb-1 flex-grow-1">
-    <div class="card-header">All Upcoming</div>
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <span>All Upcoming</span>      
+    </div>
     <div style="overflow-y:auto">
       <div class="card-body" repeat.for="i of 10">
-        <h5 class="card-title">${10-i} Act Title</h5>
+        <h5 class="card-title d-flex align-items-center justify-content-between">${10-i} Act Title
+          <a href="/Act-finished" class="btn btn-md btn-outline-secondary">Fast Forward ⏩</a>
+        </h5>
         <h6 class="card-subtitle mb-2">
           Beavers/Cubs/Scouts/Explorers/The Group
         </h6>
