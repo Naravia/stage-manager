@@ -10,7 +10,7 @@
 
       <div class="navbar-collapse collapse" id="navbarsExample01">
         <ul class="navbar-nav me-auto mb-2">
-          <li class="nav-item" repeat.for="nav of navLinks()">
+          <li class="nav-item" repeat.for="nav of navLinks()" click.trigger="closeNavBar()">
             <a class="nav-link ${nav.isActive ? 'active' : ''}" aria-current="page"
               href.bind="nav.href">${nav.title}</a>
           </li>
